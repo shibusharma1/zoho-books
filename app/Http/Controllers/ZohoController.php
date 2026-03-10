@@ -69,6 +69,7 @@ class ZohoController extends Controller
         return $data;
     }
 
+    // function to get the organization ID
     public function organizations()
     {
         $accessToken = $this->getValidAccessToken();
@@ -89,6 +90,8 @@ class ZohoController extends Controller
         return $response->json();
     }
 
+
+    // CRUD functions for the customer
     public function customers()
     {
         $accessToken = $this->getValidAccessToken();
@@ -184,4 +187,74 @@ class ZohoController extends Controller
 
         return $response->json();
     }
+
+    // CRUD operation for the taxes
+    public function taxList()
+{
+    $accessToken = $this->getValidAccessToken();
+    $orgId = session('zoho_organization_id');
+
+    $response = Http::withToken($accessToken)
+        ->get("https://www.zohoapis.com/books/v3/settings/taxes", [
+            'organization_id' => $orgId
+        ]);
+
+    return $response->json();
+}
+public function createTaxForm()
+{
+    return view('zoho.tax.create');
+}
+public function storeTax(Request $request)
+{
+    $accessToken = $this->getValidAccessToken();
+    $orgId = session('zoho_organization_id');
+
+    $response = Http::withToken($accessToken)
+        ->post("https://www.zohoapis.com/books/v3/settings/taxes?organization_id={$orgId}", [
+            "tax_name" => $request->tax_name,
+            "tax_percentage" => $request->tax_percentage
+        ]);
+
+    return $response->json();
+}
+public function editTaxForm($id)
+{
+    $accessToken = $this->getValidAccessToken();
+    $orgId = session('zoho_organization_id');
+
+    $response = Http::withToken($accessToken)
+        ->get("https://www.zohoapis.com/books/v3/settings/taxes/{$id}", [
+            'organization_id' => $orgId
+        ]);
+
+    $tax = $response->json()['tax'];
+
+    return view('zoho.tax.edit', compact('tax'));
+}
+public function updateTax(Request $request, $id)
+{
+    $accessToken = $this->getValidAccessToken();
+    $orgId = session('zoho_organization_id');
+
+    $response = Http::withToken($accessToken)
+        ->put("https://www.zohoapis.com/books/v3/settings/taxes/{$id}?organization_id={$orgId}", [
+            "tax_name" => $request->tax_name,
+            "tax_percentage" => $request->tax_percentage
+        ]);
+
+    return $response->json();
+}
+public function deleteTax($id)
+{
+    $accessToken = $this->getValidAccessToken();
+    $orgId = session('zoho_organization_id');
+
+    $response = Http::withToken($accessToken)
+        ->delete("https://www.zohoapis.com/books/v3/settings/taxes/{$id}", [
+            'organization_id' => $orgId
+        ]);
+
+    return $response->json();
+}
 }
