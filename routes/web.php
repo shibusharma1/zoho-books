@@ -21,11 +21,9 @@ Route::get('/zoho/customer/{id}/delete', [ZohoController::class, 'deleteCustomer
 Route::get('/zoho/taxes', [ZohoController::class, 'taxList']);
 Route::get('/zoho/taxes/create', [ZohoController::class, 'createTaxForm']);
 Route::post('/zoho/taxes/store', [ZohoController::class, 'storeTax']);
-
 Route::get('/zoho/taxes/{id}/edit', [ZohoController::class, 'editTaxForm']);
 Route::put('/zoho/taxes/{id}', [ZohoController::class, 'updateTax']);
-
-Route::delete('/zoho/taxes/{id}', [ZohoController::class, 'deleteTax']);
+Route::get('/zoho/taxes/{id}', [ZohoController::class, 'deleteTax']);
 
 
 Route::get('/', function () {
