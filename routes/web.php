@@ -1,7 +1,11 @@
 <?php
 
+
+
+use App\Http\Controllers\ApiCredentialController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ZohoController;
+
 
 Route::get('/zoho/connect', [ZohoController::class, 'redirectToZoho']);
 Route::get('/zoho/callback', [ZohoController::class, 'handleZohoCallback']);
@@ -29,3 +33,8 @@ Route::get('/zoho/taxes/{id}', [ZohoController::class, 'deleteTax']);
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+
+Route::get('api-credentials/{service_type?}', [ApiCredentialController::class, 'form'])->name('api-credentials.form');
+Route::post('api-credentials/save', [ApiCredentialController::class, 'save'])->name('api-credentials.save');
